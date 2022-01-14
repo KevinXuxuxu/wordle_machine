@@ -2,7 +2,7 @@ from collections import defaultdict
 from typing import Callable, List
 from wordle import Wordle
 
-FIRST_GUESS = 'audio'
+EXPLORE_WORDS = ['aeros', 'unlit']
 
 class WordleMachine:
 
@@ -45,8 +45,13 @@ class WordleMachine:
             return True
         return [w for w in source if condition(w)]
 
+    def select(self, source: List[str], i: str) -> str:
+        if i < len(EXPLORE_WORDS):
+            return EXPLORE_WORDS[i]
+        return source[0]
+
     def run(self, wordle: 'Wordle', n: int = 6) -> str:
-        guessed = FIRST_GUESS
+        guessed = EXPLORE_WORDS[0]
         self.print('Guess 1: ' + guessed)
         result = wordle.guess(guessed)
         self.print('Result:  ' + result)
@@ -56,7 +61,7 @@ class WordleMachine:
             self.print(len(source))
             if len(source) < 100:
                 self.print(source)
-            guessed = source[0]
+            guessed = self.select(source, i)
             self.print(f'Guess {i+1}: ' + guessed)
             result = wordle.guess(guessed)
             self.print('Result:  ' + result)
