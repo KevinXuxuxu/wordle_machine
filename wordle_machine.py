@@ -43,12 +43,32 @@ class WordleMachine:
                 if n in w:
                     return False
             return True
-        return [w for w in source if condition(w)]
+        result = [w for w in source if condition(w)]
+        self.print('Number of possible words: {}'.format(len(result)))
+        return result
 
     def select(self, source: List[str], i: str) -> str:
+        guessed = source[0]
         if i < len(EXPLORE_WORDS):
-            return EXPLORE_WORDS[i]
-        return source[0]
+            guessed = EXPLORE_WORDS[i]
+        self.print(f'Guess {i+1}: ' + guessed)
+        return guessed
+
+    def guess(self, wordle: 'Wordle', guessed: str) -> str:
+        # non-interactive mode
+        result = wordle.guess(guessed)
+        self.print('Result:  ' + result)
+        return result
+
+    def get_result(self) -> str:
+        # interactive mode
+        if self.quiet:
+            raise Exception('Cannot use interactive mode in quiet mode.')
+        print('Result:  ', end='')
+        result = input()
+        if len(result) == 5 or (set(result) - set('_!?')).empty():
+            return result
+        raise Exception('Input result is malformed! Must be 5 charactors of _, ! or ?')
 
     def run(self, wordle: 'Wordle' = None, n: int = 6) -> Tuple[str, int]:
         if not wordle:
@@ -56,30 +76,17 @@ class WordleMachine:
                 print('Cannot use interactive mode in quiet mode.')
                 return
             print('Interactive mode:')
-        guessed = EXPLORE_WORDS[0]
-        self.print('Guess 1: ' + guessed)
-        if wordle:
-            result = wordle.guess(guessed)
-            self.print('Result:  ' + result)
-        else:
-            print('Result:  ', end='')
-            result = input()
         source = self.words.copy()
+        guessed = self.select(source, 0)
+        result = self.guess(wordle, guessed) if wordle else self.get_result()
         for i in range(1, n):
             source = self.filter(source, guessed, result)
-            self.print('Number of possible words: {}'.format(len(source)))
             guessed = self.select(source, i)
-            self.print(f'Guess {i+1}: ' + guessed)
-            if wordle:
-                result = wordle.guess(guessed)
-                self.print('Result:  ' + result)
-            else:
-                print('Result:  ', end='')
-                result = input()
-            if result == '!!!!!':
+            result = self.guess(wordle, guessed) if wordle else self.get_result()
+            if result == '!!!!!':  # success
                 self.print('Congrats!')
                 return guessed, i+1
-        if wordle:
+        if wordle:  # fail
             self.print('Sorry, correct answer is ' + wordle.word)
         return None, 7
 
