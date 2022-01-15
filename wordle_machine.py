@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Callable, List
+from typing import Callable, List, Tuple
 from wordle import Wordle
 
 EXPLORE_WORDS = ['aeros', 'unlit']
@@ -50,7 +50,7 @@ class WordleMachine:
             return EXPLORE_WORDS[i]
         return source[0]
 
-    def run(self, wordle: 'Wordle', n: int = 6) -> str:
+    def run(self, wordle: 'Wordle', n: int = 6) -> Tuple[str, int]:
         guessed = EXPLORE_WORDS[0]
         self.print('Guess 1: ' + guessed)
         result = wordle.guess(guessed)
@@ -67,6 +67,6 @@ class WordleMachine:
             self.print('Result:  ' + result)
             if result == '!!!!!':
                 self.print('Congrats!')
-                return guessed
+                return guessed, i+1
         self.print('Sorry, correct answer is ' + wordle.word)
-        return None
+        return None, 7

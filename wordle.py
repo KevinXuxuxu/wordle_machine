@@ -13,6 +13,14 @@ class Wordle:
                 self.words = set([line.strip() for line in f.readlines()])
         self.word = word if word else choice(list(self.words))
 
+    def reset(self, word: str = None):
+        if not word:
+            if not self.words:
+                raise Exception('Words not loaded, must set a word to reset!')
+            self.word = choice(list(self.words))
+        else:
+            self.word = word
+
     def guess(self, guessed: str) -> str:
         if self.words and guessed not in self.words:
             raise NotAWordException()
