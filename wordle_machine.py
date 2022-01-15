@@ -50,23 +50,42 @@ class WordleMachine:
             return EXPLORE_WORDS[i]
         return source[0]
 
-    def run(self, wordle: 'Wordle', n: int = 6) -> Tuple[str, int]:
+    def run(self, wordle: 'Wordle' = None, n: int = 6) -> Tuple[str, int]:
+        if not wordle:
+            if self.quiet:
+                print('Cannot use interactive mode in quiet mode.')
+                return
+            print('Interactive mode:')
         guessed = EXPLORE_WORDS[0]
         self.print('Guess 1: ' + guessed)
-        result = wordle.guess(guessed)
-        self.print('Result:  ' + result)
+        if wordle:
+            result = wordle.guess(guessed)
+            self.print('Result:  ' + result)
+        else:
+            print('Result:  ', end='')
+            result = input()
         source = self.words.copy()
         for i in range(1, n):
             source = self.filter(source, guessed, result)
-            self.print(len(source))
-            if len(source) < 100:
-                self.print(source)
+            self.print('Number of possible words: {}'.format(len(source)))
             guessed = self.select(source, i)
             self.print(f'Guess {i+1}: ' + guessed)
-            result = wordle.guess(guessed)
-            self.print('Result:  ' + result)
+            if wordle:
+                result = wordle.guess(guessed)
+                self.print('Result:  ' + result)
+            else:
+                print('Result:  ', end='')
+                result = input()
             if result == '!!!!!':
                 self.print('Congrats!')
                 return guessed, i+1
-        self.print('Sorry, correct answer is ' + wordle.word)
+        if wordle:
+            self.print('Sorry, correct answer is ' + wordle.word)
         return None, 7
+
+def main():
+    wordle_machine = WordleMachine(quiet=False)
+    wordle_machine.run()
+
+if __name__ == '__main__':
+    main()
