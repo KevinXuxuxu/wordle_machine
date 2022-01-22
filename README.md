@@ -60,6 +60,16 @@ Result:  !!!!!    # <- your input
 Congrats!
 ```
 
+### Benchmark
+Success rate around 86% for now.
+```shell
+$ python3.9 benchmark.py
+max 6 guesses, 10000 plays
+Success stats:   {1: 0, 2: 1, 3: 1674, 4: 3382, 5: 2332, 6: 1228}
+Success distro:  {1: 0.0, 2: 0.0001, 3: 0.1674, 4: 0.3382, 5: 0.2332, 6: 0.1228}
+Failed count and rate:  1383 0.1383
+```
+
 ### TODO
 - Better word choosing strategy (now just the first word in the possible list)
 - Better cmd option for alternate strategy choice

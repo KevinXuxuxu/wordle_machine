@@ -4,6 +4,7 @@ from wordle import Wordle
 from wordle_machine import WordleMachine
 
 def benchmark(n: int = 6, N: int = 10000):
+    print(f'max {n} guesses, {N} plays')
     wordle = Wordle()
     wordle_machine = WordleMachine()
     steps = Counter()
@@ -20,4 +21,7 @@ def benchmark(n: int = 6, N: int = 10000):
     print('Success stats:  ', {i: steps[i] for i in range(1, n+1)})
     print('Success distro: ', {i: steps[i] / N for i in range(1, n+1)})
     print('Failed count and rate: ', failed_cnt, failed_cnt / N)
-    print('Failed words: ', failed_words)
+    # print('Failed words: ', failed_words)
+
+if __name__ == "__main__":
+    benchmark()
