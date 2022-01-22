@@ -1,4 +1,4 @@
-# Wordle Machine (and Wordle) (in commandline)
+# Wordle Machine (and Wordle Game) (in commandline)
 
 My implementation of the Wordle game (inspired by https://www.powerlanguage.co.uk/wordle/) and my interactive solving machine for the Wordle game. The strategy is originated from this blog post [Best Wordle Strategy — Explore or Exploit](https://slc.is/#Best%20Wordle%20Strategy%20%E2%80%94%20Explore%20or%20Exploit) and I'm still working on some optimization over that.
 
